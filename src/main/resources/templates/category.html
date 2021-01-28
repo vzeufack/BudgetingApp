@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://thymeleaf.org">
+	<head>
+		<title>Your category</title>
+		<script th:include = "fragments/header :: headerScripts" th:remove = "tag"></script>
+	</head>
+	<body>
+		<div class="card">
+		    <div class="card-header"> 
+		        <div class="row">
+			        <nav aria-label="breadcrumb">
+					    <ol class="breadcrumb h2">
+					        <li class="breadcrumb-item"><a href="/budgets">Budgets</a></li>
+					        <li class="breadcrumb-item"> <a th:href ="@{/budgets/{budgetId} (budgetId = ${group.budget.id})}" th:text = "${group.budget.name}"></a></li>
+					        <li class="breadcrumb-item"><a th:href ="@{/budgets/{budgetId}/groups/{groupId} (budgetId = ${group.budget.id}, groupId = ${group.id})}" th:text = "${#strings.isEmpty(group.name) ? 'New Group' : group.name}"></a></li>					        
+					        <li class="breadcrumb-item active" aria-current="page" th:text = "${category.name}"></li>
+					    </ol>
+					</nav>
+		        </div>
+		    </div>		    
+		    <div class="card-body">
+		        <form action = "" method = "post">
+			    	<div class="row mb-3">
+				    	<label for="name" class="col-sm-2 col-form-label form-control-lg">Name</label>
+					    <div class="col-sm-10">
+					      	<input type="text" class="form-control form-control-lg" th:field="${category.name}" placeholder = "category name"/>
+					    </div>
+	  				</div>
+	  				
+	  				<div class="row mb-3">
+				    	<label for="budget" class="col-sm-2 col-form-label form-control-lg">Budget</label>
+					    <div class="col-sm-10">
+					      	<input type="number" step = ".01" class="form-control form-control-lg" th:field="${category.budget}" placeholder = "Budget amount in dollars $"/>
+					    </div>
+	  				</div>
+	  				
+	  				<button class = "btn btn-primary btn-lg">Save</button>
+		        </form>
+		    </div>
+		</div>
+	</body>
+</html>

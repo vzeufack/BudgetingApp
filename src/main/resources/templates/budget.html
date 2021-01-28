@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://thymeleaf.org">
+	<head>
+		<title>Your budget</title>
+		<script th:include = "fragments/header :: headerScripts" th:remove = "tag"></script>
+		<link rel="stylesheet" href="/fontawesome-free-5.15.1-web/css/all.css"/>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+		
+		<style type = "text/css">
+			.link{
+				cursor: pointer;
+				color: #007bff;
+			}
+			.link:hover{
+				text-decoration: underline;
+				color: #0056b3;
+			}
+		</style>
+		
+		<script th:inline = "javascript">
+			//<![CDATA[
+			$(function(){
+			   var hasCategories = /*[[${hasCategories}]]*/ false;
+			   var budgetId = /*[[${budget.id}]]*/ 0;
+			   
+			   $('#dateRange').daterangepicker({}, 
+			      function(start, end, label) {
+    				 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  				     $.ajax({
+  				        url: '',
+  				        type: 'json',
+  				        method: 'put',
+  				        data: {
+  				           "startDate": start.format('YYYY-MM-DD'),
+  				           "endDate": end.format('YYYY-MM-DD')
+  				        },
+  				        success: function(){
+  				           $('#startDate').text(start.format('MMM D, YYYY') + " - ");
+  				           $('#endDate').text(end.format('MMM D, YYYY'));
+  				        },
+  				        
+  				        error: function(error){
+  				        	console.log(error);
+  				        }
+  				     });
+  				  });
+  				  
+  				  $('#addTransaction').click(function(){
+  				     if (hasCategories)
+  				     	$("#addTxnForm").submit();
+  				     else
+  				     	alert("You must create a category before you can add a transaction to your budget.");
+  				  });
+			});
+			//]]>
+		</script>
+	</head>
+	<body>
+		<div class="card">
+		    <div class="card-header"> 
+		        <div class="row">
+			        <nav class = "col-10 col-md-11" aria-label="breadcrumb">
+					    <ol class="breadcrumb h2">
+					        <li class="breadcrumb-item"><a href="/budgets">Budgets</a></li>
+					        <li class="breadcrumb-item active" aria-current="page" th:text = "${budget.name}"></li>
+					    </ol>
+					</nav>
+					<div class = "col-2 col-md-1">
+						<form id = "addTxnForm" method = "post" th:action = "@{/budgets/{budgetId}/transactions (budgetId = ${budget.id})}">
+				        	<i id = "addTransaction" class="fas fa-plus-circle fa-2x"></i>
+						</form>
+			        </div>
+		        </div>
+		    </div>
+		    
+		    <div class="card-body">
+		        <div id = "dateRange" class = "h5 alert alert-secondary link">
+		        	<span id="startDate" th:inline = "text">[[${#dates.format(budget.startDate, "MMM d, yyyy")}]] -</span>
+		        	<span id="endDate" th:inline = "text">[[${#dates.format(budget.endDate, "MMM d, yyyy")}]]</span>
+		        </div>
+		        <div th:each = "group : ${budget.groups}">
+		        	<div class="card" style = "margin-bottom: 1em;">
+			        	<div class = "card-header">
+			            	<h4 th:if = "${!#strings.isEmpty(group.name)}"><a th:href = "@{/budgets/{budgetId}/groups/{groupId} (budgetId = ${budget.id}, groupId = ${group.id})}" th:text = "${group.name}"></a></h4>
+			            	<h4 th:if = "${#strings.isEmpty(group.name)}"> <a th:href = "@{/budgets/{budgetId}/groups/{groupId} (budgetId = ${budget.id}, groupId = ${group.id})}">Unamed Group</a></h4>
+			        	</div>
+			        	<div class="card-body">
+			        		<div th:each="category : ${group.categories}">
+			        			<a th:href = "@{/budgets/{budgetId}/groups/{groupId}/categories/{categoryId} (budgetId = ${budget.id}, groupId = ${group.id}, categoryId = ${category.id})}" th:text = "${category.name}"></a>
+			        		</div>
+			            	<form style = "margin-top: 0.5em;" th:action = "@{/budgets/{budgetId}/groups/{groupId}/categories (budgetId = ${budget.id}, groupId = ${group.id})}" method = "post">
+			            		<button class = "btn btn-primary" th:id = "|createCategory-${group.id}|">Create Category</button>
+			                </form>
+			            </div>
+		        	</div>
+		        </div>
+		        
+		        <div class = "row" style = "margin-top:1em;">
+		        	<div class = "col">
+		        		<form th:action = "@{/budgets/{budgetId}/groups (budgetId = ${budget.id})}" method = "post">
+		        	    	<button type="submit" class="btn-btn-primary">Create Group</button>
+		        		</form>
+		        	</div>
+		        </div>
+		    </div>
+		</div>
+	</body>
+</html>

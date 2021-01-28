@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://thymeleaf.org">
+<head>
+	<title>Please Register</title>
+	<script th:include = "fragments/header :: headerScripts" th:remove = "tag"></script>	
+	<script type="text/javascript">
+	   $(function(){
+	      if($("#errorMsg").text() != ""){
+	        $("#errorMsg").removeClass("d-none");
+	      }
+	   });
+	</script>
+</head>
+<body>
+
+	<div class="card">
+	  <h2 class="card-header">Please register below</h2>
+	  <div class="card-body">
+	    <div id="errorMsg" class="alert alert-danger d-none" role="alert" th:text = "${error}"></div>
+	    <form action = "" method = "post">
+		  <div class="mb-3">
+		    <label for="username" class="form-label">Email address</label>
+		    <input type="email" class="form-control" th:field = "${user.username}" aria-describedby="emailHelp"/>
+		    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+		  </div>
+		  <div class="mb-3">
+		    <label for="password" class="form-label">Password</label>
+		    <input type="password" class="form-control" th:field = "${user.password}"/>
+		  </div>
+		  
+		  <div class="mb-3">
+		    <label for="confirmPassword" class="form-label">Confirm Password</label>
+		    <input type="password" class="form-control" th:field = "${user.confirmPassword}"/>
+		  </div>
+		  
+		  <button type="submit" class="btn btn-primary">Register</button>
+		</form>
+	  </div>
+	</div>
+
+</body>
+</html>
