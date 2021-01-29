@@ -4,7 +4,7 @@ Spring Boot budgeting web application for keeping track of expenses.
 ## Requirements
 - [x] Mobile friendly (fit on mobile best)
 - [x] Create monthly budgets
-- [x] Create categories for expenses- 
+- [x] Create categories for expenses
 - [x] Group categories
 - [x] Set budget for each category
 - [ ] Add transactions and categorize each transaction
