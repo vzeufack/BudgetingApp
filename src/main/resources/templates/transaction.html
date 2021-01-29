@@ -20,6 +20,9 @@
           <div class="card-body">
               <form action = "" method = "post">
               
+              <input type = "hidden" th:field="${transaction.id}"/>
+              <input type = "hidden" th:field="${transaction.budget}"/>
+              
               <!-- Date -->
                <div class="row mb-3">
                   <label for="date" class="col-sm-2 col-form-label form-control-lg">Date:</label>

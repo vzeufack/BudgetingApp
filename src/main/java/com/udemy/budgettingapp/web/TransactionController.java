@@ -1,6 +1,6 @@
 package com.udemy.budgettingapp.web;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,7 +40,7 @@ public class TransactionController {
 		txn.setBudget(budget);
 		budget.getTransactions().add(txn);		
 		
-		txn.setDate(new Date());
+		txn.setDate(LocalDate.now());
 		
 		if (categoryId != null) {			
 			Category category = categoryService.findById(categoryId);
