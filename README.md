@@ -1,4 +1,4 @@
-# Budgeting app
+# Budgeting App
 Spring Boot budgeting web application for keeping track of expenses.
 
 ## Requirements
