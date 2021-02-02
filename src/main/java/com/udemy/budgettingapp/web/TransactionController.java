@@ -1,6 +1,9 @@
 package com.udemy.budgettingapp.web;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.udemy.budgettingapp.domain.Budget;
 import com.udemy.budgettingapp.domain.Category;
 import com.udemy.budgettingapp.domain.Transaction;
+import com.udemy.budgettingapp.dto.CategoryDto;
 import com.udemy.budgettingapp.service.BudgetService;
 import com.udemy.budgettingapp.service.CategoryService;
 import com.udemy.budgettingapp.service.TransactionService;
@@ -58,6 +62,14 @@ public class TransactionController {
 		Transaction txn = transactionService.findById(transactionId);
 		model.put("transaction", txn);
 		model.put("budget", txn.getBudget());
+		
+		List<CategoryDto> categories = txn.getBudget().getGroups()
+									                  .stream()
+									                  .map(group -> group.getCategories())
+									                  .flatMap(Collection::stream)
+									                  .map(category -> new CategoryDto(category.getId().toString(), category.getName()))
+									                  .collect(Collectors.toList());
+	    model.put("categories", categories);		
 		return "transaction";
 	}
 	
