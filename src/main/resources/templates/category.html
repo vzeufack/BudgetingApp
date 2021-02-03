@@ -3,6 +3,17 @@
 	<head>
 		<title>Your category</title>
 		<script th:include = "fragments/header :: headerScripts" th:remove = "tag"></script>
+		<script th:inline="javascript">
+			$(function(){
+			    var budgetId = /*[[${group.budget.id}]]*/0;
+			    var categoryId = /*[[${category.id}]]*/0;
+			    
+				$("tr[id*='transaction-']").click(function(){
+				   var transactionId = $(this).prop('id').split('-')[1];
+				   window.location.href = '/budgets/' + budgetId + '/categories/' + categoryId + '/transactions/' + transactionId;
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<div class="card">
@@ -37,6 +48,28 @@
 	  				<button class = "btn btn-primary btn-lg">Save</button>
 		        </form>
 		    </div>
+		</div>
+		
+		<div class="card">
+			<div class="card-header h3">Transactions</div>
+			<div class="card-body">
+			    <table class="table table-striped">
+				    <thead>
+					    <tr>
+					      <th scope="col">Date</th>
+					      <th scope="col">Total</th>
+					      <th scope="col">Notes</th>
+					    </tr>
+				    </thead>
+				  	<tbody>				    	
+				    	<tr th:each="transaction: ${category.transactions}" style="cursor:pointer;" th:id="|transaction-${transaction.id}|">
+					      <td th:text="${#temporals.format(transaction.date, 'MMM-dd')}"></td>
+					      <td th:text="${#numbers.formatCurrency(transaction.total)}"></td>
+					      <td th:text="${transaction.note}"></td>
+				    	</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</body>
 </html>
