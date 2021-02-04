@@ -3,14 +3,20 @@
 	<head>
 		<title>Your category</title>
 		<script th:include = "fragments/header :: headerScripts" th:remove = "tag"></script>
+		<link rel="stylesheet" href="/fontawesome-free-5.15.1-web/css/all.css"/>
 		<script th:inline="javascript">
 			$(function(){
 			    var budgetId = /*[[${group.budget.id}]]*/0;
 			    var categoryId = /*[[${category.id}]]*/0;
+			    var groupdId = /*[[${group.id}]]*/0;
 			    
 				$("tr[id*='transaction-']").click(function(){
 				   var transactionId = $(this).prop('id').split('-')[1];
-				   window.location.href = '/budgets/' + budgetId + '/categories/' + categoryId + '/transactions/' + transactionId;
+				   window.location.href = '/budgets/' + budgetId + '/groups/' + groupdId + '/categories/' + categoryId + '/transactions/' + transactionId;
+				});
+				
+				$('#addTransaction').click(function(){
+				    $("#addTxnForm").submit();
 				});
 			});
 		</script>
@@ -19,7 +25,7 @@
 		<div class="card">
 		    <div class="card-header"> 
 		        <div class="row">
-			        <nav aria-label="breadcrumb">
+			        <nav class = "col-10 col-md-11" aria-label="breadcrumb">
 					    <ol class="breadcrumb h2">
 					        <li class="breadcrumb-item"><a href="/budgets">Budgets</a></li>
 					        <li class="breadcrumb-item"> <a th:href ="@{/budgets/{budgetId} (budgetId = ${group.budget.id})}" th:text = "${group.budget.name}"></a></li>
@@ -27,6 +33,12 @@
 					        <li class="breadcrumb-item active" aria-current="page" th:text = "${category.name}"></li>
 					    </ol>
 					</nav>
+					<div class = "col-2 col-md-1">
+						<form id = "addTxnForm" method = "post" 
+						      th:action = "@{/budgets/{budgetId}/groups/{groupId}/categories/{categoryId}/transactions (budgetId = ${group.budget.id}, groupId = ${group.id}, categoryId = ${category.id})}">
+				        	<i id = "addTransaction" class="fas fa-plus-circle fa-2x"></i>
+						</form>
+			        </div>
 		        </div>
 		    </div>		    
 		    <div class="card-body">

@@ -38,6 +38,7 @@ public class TransactionController {
 	@PostMapping("")
 	public String addTransaction(@PathVariable Long budgetId, @PathVariable(required = false) Long groupId, 
 			                       @PathVariable(required = false) Long categoryId) {
+		String returnUrl = "redirect:/budgets/" + budgetId;
 		Transaction txn = new Transaction();
 		Budget budget = budgetService.findOne(budgetId).get();
 		
@@ -50,11 +51,12 @@ public class TransactionController {
 			Category category = categoryService.findById(categoryId);
 			txn.setCategory(category);
 			category.getTransactions().add(txn);
+			returnUrl += "/groups/" + groupId + "/categories/" + categoryId;
 		}
 		
 		txn = transactionService.save(txn);
 		
-		return "redirect:/budgets/" + budgetId + "/transactions/" + txn.getId();
+		return returnUrl + "/transactions/" + txn.getId();
 	}
 	
 	@GetMapping("{transactionId}")

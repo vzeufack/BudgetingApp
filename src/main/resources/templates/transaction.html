@@ -38,7 +38,7 @@
       <div class="card">
           <div class="card-header"> 
               <div class="row">
-                 <nav aria-label="breadcrumb">
+                 <nav class = "col-10 col-md-11" aria-label="breadcrumb">
                    <ol class="breadcrumb h2">
                        <li class="breadcrumb-item"><a href="/budgets">Budgets</a></li>
                        <li class="breadcrumb-item"> <a th:href ="@{/budgets/{budgetId} (budgetId = ${budget.id})}" th:text = "${budget.name}"></a></li>
