@@ -1,5 +1,9 @@
 package com.udemy.budgettingapp.web;
 
+import java.time.LocalDate;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.udemy.budgettingapp.domain.Category;
 import com.udemy.budgettingapp.domain.Group;
+import com.udemy.budgettingapp.domain.Transaction;
 import com.udemy.budgettingapp.service.CategoryService;
 import com.udemy.budgettingapp.service.GroupService;
 
@@ -39,10 +44,19 @@ public class CategoryController {
    
    @GetMapping("{categoryId}")
    public String getCategory(@PathVariable Long categoryId, ModelMap model) {
-   	Category category = categoryService.findById(categoryId);
-   	model.put("category", category);
-   	model.put("group", category.getGroup());
-   	return "category";
+      Category category = categoryService.findById(categoryId);
+      
+      LocalDate startDate = category.getGroup().getBudget().getStartDate();
+      LocalDate endDate = category.getGroup().getBudget().getEndDate();
+	  
+      Set<Transaction> filteredTxns = category.getTransactions().stream()
+						                      .filter(t -> t.getDate().compareTo(startDate) >= 0 && t.getDate().compareTo(endDate) <= 0)
+						                      .collect(Collectors.toSet());
+      
+      model.put("filteredTxns", filteredTxns);
+      model.put("category", category);
+	  model.put("group", category.getGroup());
+	  return "category";
    }
    
    @PostMapping("{categoryId}")

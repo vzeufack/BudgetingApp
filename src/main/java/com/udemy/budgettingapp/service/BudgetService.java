@@ -1,10 +1,8 @@
 package com.udemy.budgettingapp.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -58,8 +56,8 @@ public class BudgetService {
 		return budgetRepo.findById(budgetId);
 	}
 
-	public Date convertToDate(String date) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-		return formatter.parse(date);
+	public LocalDate convertToDate(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		return LocalDate.parse(date, formatter);
 	}
 }

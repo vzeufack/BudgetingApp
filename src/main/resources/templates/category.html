@@ -40,7 +40,11 @@
 						</form>
 			        </div>
 		        </div>
-		    </div>		    
+		    </div>		
+		    <div class = "h5 alert alert-secondary link">
+	        	<span th:inline = "text">[[${#temporals.format(category.group.budget.startDate, "MMM d, yyyy")}]] -</span>
+	        	<span th:inline = "text">[[${#temporals.format(category.group.budget.endDate, "MMM d, yyyy")}]]</span>
+	        </div>    
 		    <div class="card-body">
 		        <form action = "" method = "post">
 			    	<div class="row mb-3">
@@ -74,7 +78,7 @@
 					    </tr>
 				    </thead>
 				  	<tbody>				    	
-				    	<tr th:each="transaction: ${category.transactions}" style="cursor:pointer;" th:id="|transaction-${transaction.id}|">
+				    	<tr th:each="transaction: ${filteredTxns}" style="cursor:pointer;" th:id="|transaction-${transaction.id}|">
 					      <td th:text="${#temporals.format(transaction.date, 'MMM-dd')}"></td>
 					      <td th:text="${#numbers.formatCurrency(transaction.total)}"></td>
 					      <td th:text="${transaction.note}"></td>

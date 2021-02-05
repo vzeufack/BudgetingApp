@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -38,6 +39,7 @@ public class Group implements Comparable<Group> {
 	}
    
 	@OneToMany(cascade=CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "group")
+	@OrderBy("name DESC")
 	public Set<Category> getCategories() {
 		return categories;
 	}

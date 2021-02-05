@@ -1,6 +1,6 @@
 package com.udemy.budgettingapp.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
@@ -27,8 +27,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class Budget implements Comparable<Budget>{
    private Long id;
    private String name;
-   private Date startDate;
-	private Date endDate;
+   private LocalDate startDate;
+   private LocalDate endDate;
    private Set <User> users = new TreeSet<>();
    private SortedSet<Group> groups = new TreeSet<>();
    private Set<Transaction> transactions = new HashSet<>();
@@ -50,20 +50,20 @@ public class Budget implements Comparable<Budget>{
 	}
 	
 	@Column(name = "start_date")
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
    
 	@Column(name = "end_date")
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
    

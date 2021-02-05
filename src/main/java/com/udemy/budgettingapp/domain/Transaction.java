@@ -77,5 +77,5 @@ public class Transaction {
 
 	public void setBudget(Budget budget) {
 		this.budget = budget;
-	}	
+	}
 }

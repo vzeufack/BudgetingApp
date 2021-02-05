@@ -77,8 +77,8 @@
 		    
 		    <div class="card-body">
 		        <div id = "dateRange" class = "h5 alert alert-secondary link">
-		        	<span id="startDate" th:inline = "text">[[${#dates.format(budget.startDate, "MMM d, yyyy")}]] -</span>
-		        	<span id="endDate" th:inline = "text">[[${#dates.format(budget.endDate, "MMM d, yyyy")}]]</span>
+		        	<span id="startDate" th:inline = "text">[[${#temporals.format(budget.startDate, "MMM d, yyyy")}]] -</span>
+		        	<span id="endDate" th:inline = "text">[[${#temporals.format(budget.endDate, "MMM d, yyyy")}]]</span>
 		        </div>
 		        <div th:each = "group : ${budget.groups}">
 		        	<div class="card" style = "margin-bottom: 1em;">
@@ -87,9 +87,25 @@
 			            	<h4 th:if = "${#strings.isEmpty(group.name)}"> <a th:href = "@{/budgets/{budgetId}/groups/{groupId} (budgetId = ${budget.id}, groupId = ${group.id})}">Unamed Group</a></h4>
 			        	</div>
 			        	<div class="card-body">
-			        		<div th:each="category : ${group.categories}">
-			        			<a th:href = "@{/budgets/{budgetId}/groups/{groupId}/categories/{categoryId} (budgetId = ${budget.id}, groupId = ${group.id}, categoryId = ${category.id})}" th:text = "${category.name}"></a>
-			        		</div>
+			        		<table class="table table-striped">
+							    <thead>
+								    <tr>
+								      <th scope="col">Category</th>
+								      <th scope="col">Planned</th>
+								      <th scope="col">Spent</th>
+								      <th scope="col">Remaining</th>
+								    </tr>
+							    </thead>
+							  	<tbody>				    	
+							    	<tr th:each="category : ${group.categories}" style="cursor:pointer;">
+								      <td><a th:href = "@{/budgets/{budgetId}/groups/{groupId}/categories/{categoryId} (budgetId = ${budget.id}, groupId = ${group.id}, categoryId = ${category.id})}" 
+								             th:text = "${category.name}"></a></td>
+								      <td th:text="${#numbers.formatCurrency(category.budget)}"></td>
+								      <td th:text="${#numbers.formatCurrency(category.spent)}"></td>
+								      <td th:text="${#numbers.formatCurrency(category.remaining)}"></td>
+							    	</tr>
+								</tbody>
+							</table>
 			            	<form style = "margin-top: 0.5em;" th:action = "@{/budgets/{budgetId}/groups/{groupId}/categories (budgetId = ${budget.id}, groupId = ${group.id})}" method = "post">
 			            		<button class = "btn btn-primary" th:id = "|createCategory-${group.id}|">Create Category</button>
 			                </form>

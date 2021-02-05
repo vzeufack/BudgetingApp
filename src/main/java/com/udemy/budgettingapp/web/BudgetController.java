@@ -1,8 +1,7 @@
 package com.udemy.budgettingapp.web;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,28 +53,18 @@ public class BudgetController {
    
    @RequestMapping(value = "", method = RequestMethod.POST)
    public @ResponseBody Budget postBudget(@AuthenticationPrincipal User user, ModelMap model) {
-   	Budget budget = new Budget();   	
+   	  Budget budget = new Budget();   	
    	
-   	Calendar cal = Calendar.getInstance();
-   	cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, 0, 0);
-   	cal.set(Calendar.MILLISECOND, 0);
-   	Date firstOfMonth = cal.getTime();
+      LocalDate firstOfMonth = LocalDate.now().withDayOfMonth(1);
+   	  LocalDate lastOfMonth = LocalDate.now().withDayOfMonth(firstOfMonth.lengthOfMonth());   	
    	
-   	cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
-   	cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
-   	cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
-   	cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
-   	cal.set(Calendar.MILLISECOND, 0);
-   	Date lastOfMonth = cal.getTime();
+   	  budget.setStartDate(firstOfMonth);
+   	  budget.setEndDate(lastOfMonth);
+   	  budget = budgetService.saveBudget(user, budget);
    	
+      putsBudgetsOnModel(user, model);
    	
-   	budget.setStartDate(firstOfMonth);
-   	budget.setEndDate(lastOfMonth);
-   	budget = budgetService.saveBudget(user, budget);
-   	
-   	putsBudgetsOnModel(user, model);
-   	
-   	return budget;
+   	  return budget;
    }
    
    @PutMapping("{budgetId}")

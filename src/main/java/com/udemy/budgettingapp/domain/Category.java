@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Transient;
 
 @Entity
 public class Category {
@@ -64,4 +65,21 @@ public class Category {
 	public void setTransactions(Set<Transaction> transactions) {
 		this.transactions = transactions;
 	}	
+	
+	@Transient
+	public BigDecimal getSpent() {
+		Double sum = this.getTransactions().stream()
+							  .mapToDouble(t -> {
+								           if (t.getTotal() == null)
+								               return 0;
+							               else
+								               return t.getTotal().doubleValue();})
+							  .sum();
+	    return BigDecimal.valueOf(sum);
+	}
+	
+	@Transient
+	public BigDecimal getRemaining() {
+		return this.getBudget().subtract(this.getSpent());
+	}
 }
